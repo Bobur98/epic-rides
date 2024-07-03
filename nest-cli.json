@@ -1,8 +1,32 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "src",
+  "sourceRoot": "apps/epic-rides_api/src",
   "compilerOptions": {
-    "deleteOutDir": true
+    "deleteOutDir": true,
+    "webpack": true,
+    "tsConfigPath": "apps/epic-rides_api/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/epic-rides_api",
+  "projects": {
+    "epic-rides": {
+      "type": "application",
+      "root": "apps/epic-ride_apis",
+      "entryFile": "main",
+      "sourceRoot": "apps/epic-rides_api/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/epic-rides_api/tsconfig.app.json"
+      }
+    },
+    "epic-rides_batch": {
+      "type": "application",
+      "root": "apps/epic-rides_batch",
+      "entryFile": "main",
+      "sourceRoot": "apps/epic-rides_batch/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/epic-rides_batch/tsconfig.app.json"
+      }
+    }
   }
 }
