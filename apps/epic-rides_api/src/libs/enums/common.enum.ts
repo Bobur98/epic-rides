@@ -1,4 +1,3 @@
-export enum Message {}
 import { registerEnumType } from '@nestjs/graphql';
 
 export enum Message {
