@@ -9,7 +9,7 @@ export class MemberResolver {
 	constructor(private readonly memberService: MemberService) {}
 
 	@Mutation(() => MemberDto)
-	@UsePipes(ValidationPipe) // it helps us to validate the input before executing resolvers
+	//@UsePipes(ValidationPipe) // it helps us to validate the input before executing resolvers, but we do global error handling in main.ts with app.module
 	public async signup(@Args('input') input: MemberInputDto): Promise<MemberDto> {
 		console.log('Mutation: Sign up');
 		console.log('input: ', input);
@@ -21,7 +21,6 @@ export class MemberResolver {
 		}
 	}
 
-	@UsePipes(ValidationPipe)
 	@Mutation(() => MemberDto)
 	public async login(@Args('input') input: LoginInputDto): Promise<MemberDto> {
 		console.log('Mutation:login');

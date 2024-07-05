@@ -19,7 +19,7 @@ export class MemberService {
 			return result;
 		} catch (error) {
 			console.log('ERROR ON: SIGNUP SERVICE', error);
-			throw new BadRequestException(error);
+			throw new BadRequestException(Message.USED_MEMBER_NICK_OR_PHONE); // we are passing our customized error to golab error handling which is handled in app module
 		}
 	}
 
