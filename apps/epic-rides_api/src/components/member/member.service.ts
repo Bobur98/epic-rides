@@ -5,13 +5,18 @@ import { MemberDto } from '../../libs/dto/member/member';
 import { LoginInputDto, MemberInputDto } from '../../libs/dto/member/member.input.dto';
 import { MemberStatus } from '../../libs/enums/member.enum';
 import { Message } from '../../libs/enums/common.enum';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable()
 export class MemberService {
-	constructor(@InjectModel('Member') private readonly memberModel: Model<MemberDto>) {}
+	constructor(
+		@InjectModel('Member') private readonly memberModel: Model<MemberDto>,
+		private authService: AuthService,
+	) {}
 
 	public async signup(input: MemberInputDto): Promise<MemberDto> {
 		// hash password
+		input.memberPassword = await this.authService.hashPassword(input.memberPassword);
 
 		try {
 			const result = await this.memberModel.create(input);
@@ -37,7 +42,7 @@ export class MemberService {
 			throw new InternalServerErrorException(Message.BLOCKED_USER);
 		}
 
-		const isMatch = memberPassword === response.memberPassword;
+		const isMatch = await this.authService.comparePasswords(input.memberPassword, response.memberPassword);
 		if (!isMatch) throw new InternalServerErrorException(Message.WRONG_PASSWORD);
 		return response;
 	}
