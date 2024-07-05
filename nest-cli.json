@@ -10,7 +10,7 @@
   "monorepo": true,
   "root": "apps/epic-rides_api",
   "projects": {
-    "epic-rides": {
+    "epic-rides_api": {
       "type": "application",
       "root": "apps/epic-ride_apis",
       "entryFile": "main",
