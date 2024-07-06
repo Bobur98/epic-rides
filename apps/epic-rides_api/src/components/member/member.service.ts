@@ -22,7 +22,7 @@ export class MemberService {
 			const result = await this.memberModel.create(input);
 			// todo: Authentication via tokens
 			result.accessToken = await this.authService.createToken(result);
-			
+
 			return result;
 		} catch (error) {
 			console.log('ERROR ON: SIGNUP SERVICE', error);
@@ -58,5 +58,12 @@ export class MemberService {
 
 	public async getMember(): Promise<string> {
 		return 'getMember executed';
+	}
+
+	public async getALlMembersByAdmin(): Promise<string> {
+		return 'getALlMembersByAdmin executed';
+	}
+	public async UpdateMemberByAdmin(): Promise<string> {
+		return 'UpdateMemberByAdmin executed';
 	}
 }
