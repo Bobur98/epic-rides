@@ -2,7 +2,12 @@ import { BadRequestException, Injectable, InternalServerErrorException } from '@
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
 import { MemberDto, MembersDto } from '../../libs/dto/member/member';
-import { AgentsInquiryDto, LoginInputDto, MemberInputDto } from '../../libs/dto/member/member.input.dto';
+import {
+	AgentsInquiryDto,
+	LoginInputDto,
+	MemberInputDto,
+	MembersInquiryDto,
+} from '../../libs/dto/member/member.input.dto';
 import { MemberStatus, MemberType } from '../../libs/enums/member.enum';
 import { Direction, Message } from '../../libs/enums/common.enum';
 import { AuthService } from '../auth/auth.service';
@@ -108,24 +113,51 @@ export class MemberService {
 		if (text) match.memberNick = { $regex: new RegExp(text, 'i') };
 		console.log('match:', match);
 
-		const result = await this.memberModel.aggregate([
-			{ $match: match },
-			{ $sort: sort },
-			{
-				$facet: {
-					list: [{ $skip: (input.page - 1) * input.limit }, { $limit: input.limit }],
-					metaCounter: [{ $count: 'total' }],
+		const result = await this.memberModel
+			.aggregate([
+				{ $match: match },
+				{ $sort: sort },
+				{
+					$facet: {
+						list: [{ $skip: (input.page - 1) * input.limit }, { $limit: input.limit }],
+						metaCounter: [{ $count: 'total' }],
+					},
 				},
-			},
-		]);
+			])
+			.exec();
 
 		if (!result.length) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
 		return result[0];
 	}
-	public async getAllMembersByAdmin(): Promise<string> {
-		return 'getALlMembersByAdmin executed';
+	public async getAllMembersByAdmin(input: MembersInquiryDto): Promise<MembersDto> {
+		const { memberStatus, memberType, text } = input.search;
+		const match: T = {};
+		const sort: T = { [input?.sort ?? 'createdAt']: input?.direction ?? Direction.DESC };
+
+		if (memberStatus) match.memberStatus = memberStatus;
+		if (memberType) match.memberType = memberType;
+		if (text) match.memberNick = { $regex: new RegExp(text, 'i') };
+		console.log('match:', match);
+
+		const result = await this.memberModel
+			.aggregate([
+				{ $match: match },
+				{ $sort: sort },
+				{
+					$facet: {
+						list: [{ $skip: (input.page - 1) * input.limit }, { $limit: input.limit }],
+						metaCounter: [{ $count: 'total' }],
+					},
+				},
+			])
+			.exec();
+
+		if (!result.length) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
+		return result[0];
 	}
-	public async UpdateMemberByAdmin(): Promise<string> {
-		return 'UpdateMemberByAdmin executed';
+	public async UpdateMemberByAdmin(input: MemberUpdateDto): Promise<MemberDto> {
+		const result: MemberDto = await this.memberModel.findOneAndUpdate({ _id: input._id }, input, { new: true }).exec();
+		if (!result) throw new InternalServerErrorException(Message.UPDATE_FAILED);
+		return result;
 	}
 }
