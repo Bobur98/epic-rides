@@ -80,3 +80,18 @@ export class MemberDto {
 
 	/** from aggregation **/
 }
+
+@ObjectType()
+export class TotalCounter {
+	@Field(() => Int, { nullable: true })
+	total?: number;
+}
+
+@ObjectType()
+export class MembersDto {
+	@Field(() => [MemberDto])
+	list: MemberDto[];
+
+	@Field(() => [TotalCounter], { nullable: true })
+	metaCounter: TotalCounter[];
+}

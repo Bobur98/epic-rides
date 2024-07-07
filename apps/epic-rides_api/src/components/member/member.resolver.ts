@@ -1,8 +1,8 @@
 import { Mutation, Resolver, Query, Args } from '@nestjs/graphql';
 import { MemberService } from './member.service';
 import { InternalServerErrorException, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
-import { LoginInputDto, MemberInputDto } from '../../libs/dto/member/member.input.dto';
-import { MemberDto } from '../../libs/dto/member/member';
+import { AgentsInquiryDto, LoginInputDto, MemberInputDto } from '../../libs/dto/member/member.input.dto';
+import { MemberDto, MembersDto } from '../../libs/dto/member/member';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { AuthMember } from '../auth/decorators/authMember.decorator';
 import { ObjectId } from 'mongoose';
@@ -78,8 +78,17 @@ export class MemberResolver {
 		return this.memberService.getMember(memberId, targetId);
 	}
 
+	@UseGuards(WithoutGuard)
+	@Query(() => MembersDto)
+	public async getAgents(
+		@Args('input') input: AgentsInquiryDto,
+		@AuthMember('_id') memberId: ObjectId,
+	): Promise<MembersDto> {
+		console.log('Query, getAgents');
+		return this.memberService.getAgents(memberId, input);
+	}
 	/** ADMIN **/
-	// Authorization: Admin
+	// Authorization: Admins
 	@Roles(MemberType.ADMIN)
 	@UseGuards(RolesGuard)
 	@Mutation(() => String)
