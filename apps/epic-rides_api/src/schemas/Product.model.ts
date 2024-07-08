@@ -1,5 +1,5 @@
 import { Schema } from 'mongoose';
-import { ProductCondition, ProductLocation, ProductStatus } from '../libs/enums/product.enum';
+import { ProductCondition, ProductLocation, ProductStatus, ProductType } from '../libs/enums/product.enum';
 
 const ProductSchema = new Schema(
 	{
@@ -20,6 +20,7 @@ const ProductSchema = new Schema(
 
 		productType: {
 			type: String,
+			enum: ProductType,
 			required: true,
 		},
 
@@ -105,11 +106,6 @@ const ProductSchema = new Schema(
 			required: true,
 		},
 
-		productAddress: {
-			type: String,
-			required: true,
-		},
-
 		memberId: {
 			type: Schema.Types.ObjectId,
 			required: true,
@@ -124,7 +120,10 @@ const ProductSchema = new Schema(
 			type: Date,
 		},
 	},
-	{ timestamps: true, collection: 'properties' },
+	{ timestamps: true, collection: 'products' },
 );
+
+// ProductSchema.index({ productBrand: 1, productPrice: 1, productModel: 1 }, { unique: true });
+
 
 export default ProductSchema;

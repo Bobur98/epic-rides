@@ -1,5 +1,22 @@
 import { registerEnumType } from '@nestjs/graphql';
 
+export enum ProductType {
+	CRUISER = 'CRUISER',
+	SPORTBIKE = 'SPORTBIKE',
+	NAKED = 'NAKED',
+	TOURING = 'TOURING',
+	ADVENTURE = 'ADVENTURE',
+	DUAL_SPORT = 'DUAL_SPORT',
+	MOTOCROSS = 'MOTOCROSS',
+	SUPERMOTO = 'SUPERMOTO',
+	RETRO = 'RETRO',
+	SPORT_TOURING = 'SPORT_TOURING',
+	SCRAMBLER = 'SCRAMBLER',
+}
+registerEnumType(ProductType, {
+	name: 'ProductType',
+});
+
 export enum ProductStatus {
 	HOLD = 'HOLD',
 	ACTIVE = 'ACTIVE',

@@ -7,7 +7,13 @@ import { AuthModule } from '../auth/auth.module';
 import { ViewModule } from '../view/view.module';
 
 @Module({
-	imports: [MongooseModule.forFeature([{ name: 'Member', schema: MemberSchema }]), AuthModule, ViewModule], // to use Schema model in service model, we need to import it module file
+	imports: [
+		MongooseModule.forFeature([{ name: 'Member', schema: MemberSchema }]),
+		AuthModule,
+		ViewModule,
+		MemberModule,
+	], // to use Schema model in service model, we need to import it module file
 	providers: [MemberResolver, MemberService],
+	exports: [MemberService], // Ensure it is exported here
 })
 export class MemberModule {}

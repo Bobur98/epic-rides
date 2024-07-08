@@ -25,6 +25,10 @@ export class MemberInputDto {
 	memberType?: MemberType;
 
 	@IsOptional()
+	@Field(() => String, { nullable: true })
+	memberAddress?: string;
+
+	@IsOptional()
 	@Field(() => MemberAuthType, { nullable: true }) // memberFullName optional bolganligi uchun nullable: true
 	memberAuthType?: MemberAuthType;
 }
