@@ -44,7 +44,7 @@ class BAISearch {
 }
 
 @InputType()
-export class BoardArticlesInquiry {
+export class BoardArticlesInquiryDto {
 	@IsNotEmpty()
 	@Min(1)
 	@Field(() => Int)
