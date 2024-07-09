@@ -1,6 +1,6 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { ObjectId } from 'mongoose';
-import { MemberType, MemberStatus, MemberAuthType } from '../../enums/member.enum';
+import { MemberAuthType, MemberStatus, MemberType } from '../../enums/member.enum';
 import { ViewGroup } from '../../enums/view.enum';
 
 @ObjectType()
@@ -12,10 +12,10 @@ export class ViewDto {
 	viewGroup: ViewGroup;
 
 	@Field(() => String)
-	viewRefId: ObjectId;
+	viewRefId: ObjectId; // kimni yoki nmani tomosha qilyabti? Member, Article yoki Property
 
 	@Field(() => String)
-	memberId: ObjectId;
+	memberId: ObjectId; // kim tomosha qilyabti
 
 	@Field(() => Date)
 	createdAt: Date;
