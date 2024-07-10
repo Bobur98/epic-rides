@@ -20,6 +20,8 @@ import { LikeGroup } from '../../libs/enums/like.enum';
 import { ViewGroup } from '../../libs/enums/view.enum';
 import { StatisticModifier, T } from '../../libs/types/common';
 import { ProductUpdateDto } from '../../libs/dto/product/product.update';
+import { LikeInputDto } from '../../libs/dto/like/like.input';
+import { LikeService } from '../like/like.service';
 
 @Injectable()
 export class ProductService {
@@ -28,7 +30,7 @@ export class ProductService {
 		private authService: AuthService,
 		private viewService: ViewService,
 		private memberService: MemberService,
-		// private likeService: LikeService,
+		private likeService: LikeService,
 	) {}
 
 	public async createProduct(input: ProductInputDto): Promise<ProductDto> {
@@ -62,7 +64,7 @@ export class ProductService {
 			}
 			// meLiked
 			const likeInput = { memberId: memberId, likeRefId: productId, likeGroup: LikeGroup.PRODUCT };
-			// targetProduct.meLiked = await this.likeService.checkLikeExistence(likeInput);
+			targetProduct.meLiked = await this.likeService.checkLikeExistence(likeInput);
 		}
 
 		targetProduct.memberData = await this.memberService.getMember(null, targetProduct.memberId);
@@ -109,7 +111,7 @@ export class ProductService {
 							{ $skip: (input.page - 1) * input.limit },
 							{ $limit: input.limit },
 							// meLiked
-							// lookupAuthMemberLiked(memberId),
+							lookupAuthMemberLiked(memberId),
 							lookupMember,
 							{ $unwind: '$memberData' },
 						],
@@ -201,24 +203,24 @@ export class ProductService {
 		return result[0];
 	}
 
-	// // public async likeTargetProduct(memberId: ObjectId, likeRefId: ObjectId): Promise<ProductDto> {
-	// // 	const target: ProductDto = await this.productModel
-	// // 		.findOne({ _id: likeRefId, productStatus: ProductStatus.ACTIVE })
-	// // 		.exec();
-	// // 	if (!target) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
-	// // 	const input: LikeInputDto = {
-	// // 		memberId: memberId,
-	// // 		likeRefId: likeRefId,
-	// // 		likeGroup: LikeGroup.PRODUCT,
-	// // 	};
+	public async likeTargetProduct(memberId: ObjectId, likeRefId: ObjectId): Promise<ProductDto> {
+		const target: ProductDto = await this.productModel
+			.findOne({ _id: likeRefId, productStatus: ProductStatus.ACTIVE })
+			.exec();
+		if (!target) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
+		const input: LikeInputDto = {
+			memberId: memberId,
+			likeRefId: likeRefId,
+			likeGroup: LikeGroup.PRODUCT,
+		};
 
-	// // 	// LIKE TOGGLE
-	// // 	const modifier: number = await this.likeService.toggleLike(input);
-	// // 	const result = await this.productStatsEditor({ _id: likeRefId, targetKey: 'productLikes', modifier: modifier });
+		// LIKE TOGGLE
+		const modifier: number = await this.likeService.toggleLike(input);
+		const result = await this.productStatsEditor({ _id: likeRefId, targetKey: 'productLikes', modifier: modifier });
 
-	// // 	if (!result) throw new InternalServerErrorException(Message.SOMETHING_WENT_WRONG);
-	// // 	return result;
-	// // }
+		if (!result) throw new InternalServerErrorException(Message.SOMETHING_WENT_WRONG);
+		return result;
+	}
 
 	public async getAllProductsByAdmin(input: AllProductsInquiryDto): Promise<ProductsDto> {
 		const { productStatus, productLocationList } = input.search;

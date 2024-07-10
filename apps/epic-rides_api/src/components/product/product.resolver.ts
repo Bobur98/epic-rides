@@ -104,16 +104,16 @@ export class ProductResolver {
 		return await this.productService.getAgentProducts(memberId, input);
 	}
 
-	// @UseGuards(AuthGuard)
-	// @Mutation(() => ProductDto)
-	// public async likeTargetProduct(
-	// 	@Args('productId') input: string,
-	// 	@AuthMember('_id') memberId: ObjectId,
-	// ): Promise<ProductDto> {
-	// 	console.log('Mutation: likeTargetProduct');
-	// 	const likeRefId = shapeIntoMongoObjectId(input);
-	// 	return await this.productService.likeTargetProduct(memberId, likeRefId);
-	// }
+	@UseGuards(AuthGuard)
+	@Mutation(() => ProductDto)
+	public async likeTargetProduct(
+		@Args('productId') input: string,
+		@AuthMember('_id') memberId: ObjectId,
+	): Promise<ProductDto> {
+		console.log('Mutation: likeTargetProduct');
+		const likeRefId = shapeIntoMongoObjectId(input);
+		return await this.productService.likeTargetProduct(memberId, likeRefId);
+	}
 
 	/** ADMIN **/
 	@Roles(MemberType.ADMIN)

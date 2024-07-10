@@ -17,6 +17,7 @@ import { BoardArticleUpdateDto } from '../../libs/dto/board-article/board-articl
 import { lookupAuthMemberLiked, lookupMember, shapeIntoMongoObjectId } from '../../libs/config';
 import { LikeInputDto } from '../../libs/dto/like/like.input';
 import { LikeGroup } from '../../libs/enums/like.enum';
+import { LikeService } from '../like/like.service';
 
 @Injectable()
 export class BoardArticleService {
@@ -24,7 +25,7 @@ export class BoardArticleService {
 		@InjectModel('BoardArticle') private readonly boardArticleModel: Model<BoardArticleDto>,
 		private readonly memberService: MemberService,
 		private readonly viewService: ViewService,
-		// private readonly likeService: LikeService,
+		private readonly likeService: LikeService,
 	) {}
 
 	public async createBoardArticle(memberId: ObjectId, input: BoardArticleInputDto) {
@@ -62,8 +63,9 @@ export class BoardArticleService {
 
 			// meLiked
 			const likeInput = { memberId: memberId, likeRefId: articleId, likeGroup: LikeGroup.ARTICLE };
-			// targetBoardArticle.meLiked = await this.likeService.checkLikeExistence(likeInput);
+			targetBoardArticle.meLiked = await this.likeService.checkLikeExistence(likeInput);
 		}
+
 		targetBoardArticle.memberData = await this.memberService.getMember(null, targetBoardArticle.memberId);
 		return targetBoardArticle;
 	}
@@ -138,11 +140,13 @@ export class BoardArticleService {
 		};
 
 		// LIKE TOGGLE
-		// const modifier: number = await this.likeService.toggleLike(input);
+		const modifier: number = await this.likeService.toggleLike(input);
+		console.log(modifier, 'modifier');
+
 		const result = await this.boardArticleStatsEditor({
 			_id: likeRefId,
 			targetKey: 'articleLikes',
-			modifier: null, // modifier
+			modifier: modifier,
 		});
 
 		if (!result) throw new InternalServerErrorException(Message.SOMETHING_WENT_WRONG);
@@ -209,6 +213,8 @@ export class BoardArticleService {
 
 	public async boardArticleStatsEditor(input: StatisticModifier): Promise<BoardArticleDto> {
 		const { _id, targetKey, modifier } = input;
+		console.log(modifier, 'modifier2');
+
 		return await this.boardArticleModel.findByIdAndUpdate(_id, { $inc: { [targetKey]: modifier } }, { new: true });
 	}
 }

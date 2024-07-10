@@ -15,6 +15,9 @@ import { MemberUpdateDto } from '../../libs/dto/member/member.update';
 import { StatisticModifier, T } from '../../libs/types/common';
 import { ViewService } from '../view/view.service';
 import { ViewGroup } from '../../libs/enums/view.enum';
+import { LikeInputDto } from '../../libs/dto/like/like.input';
+import { LikeGroup } from '../../libs/enums/like.enum';
+import { LikeService } from '../like/like.service';
 
 @Injectable()
 export class MemberService {
@@ -22,6 +25,7 @@ export class MemberService {
 		@InjectModel('Member') private readonly memberModel: Model<MemberDto>,
 		private authService: AuthService,
 		private viewService: ViewService,
+		private likeService: LikeService,
 	) {}
 
 	public async signup(input: MemberInputDto): Promise<MemberDto> {
@@ -101,6 +105,10 @@ export class MemberService {
 				await this.memberModel.findByIdAndUpdate(search, { $inc: { memberViews: 1 } }, { new: true }).exec();
 				targetMember.memberViews++;
 			}
+
+			// meLiked
+			const likeInut = { memberId: memberId, likeRefId: targetId, likeGroup: LikeGroup.MEMBER };
+			targetMember.meLiked = await this.likeService.checkLikeExistence(likeInut);
 		}
 		return targetMember;
 	}
@@ -129,6 +137,26 @@ export class MemberService {
 		if (!result.length) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
 		return result[0];
 	}
+
+	public async likeTargetMember(memberId: ObjectId, likeRefId: ObjectId): Promise<MemberDto> {
+		const target: MemberDto = await this.memberModel
+			.findOne({ _id: likeRefId, memberStatus: MemberStatus.ACTIVE })
+			.exec();
+		if (!target) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
+		const input: LikeInputDto = {
+			memberId: memberId,
+			likeRefId: likeRefId,
+			likeGroup: LikeGroup.MEMBER,
+		};
+
+		// LIKE TOGGLE
+		const modifier: number = await this.likeService.toggleLike(input);
+		const result = await this.memberStatsEditor({ _id: likeRefId, targetKey: 'memberLikes', modifier: modifier });
+
+		if (!result) throw new InternalServerErrorException(Message.SOMETHING_WENT_WRONG);
+		return result;
+	}
+
 	public async getAllMembersByAdmin(input: MembersInquiryDto): Promise<MembersDto> {
 		const { memberStatus, memberType, text } = input.search;
 		const match: T = {};

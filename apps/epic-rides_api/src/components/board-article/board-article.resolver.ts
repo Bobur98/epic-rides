@@ -72,7 +72,7 @@ export class BoardArticleResolver {
 		@Args('boardArticleId') input: string,
 		@AuthMember('_id') memberId: ObjectId,
 	): Promise<BoardArticleDto> {
-		console.log('Mutation: likeTargetProperty');
+		console.log('Mutation: likeTargetProduct');
 		const likeRefId = shapeIntoMongoObjectId(input);
 		return await this.boardArticleService.likeTargetBoardArticle(memberId, likeRefId);
 	}
