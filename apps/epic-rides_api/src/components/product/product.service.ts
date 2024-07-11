@@ -164,12 +164,13 @@ export class ProductService {
 		}
 	}
 
-	// // public async getFavorites(memberId: ObjectId, input: OrdinaryInquiryDto): Promise<ProductsDto> {
-	// // 	return await this.likeService.geFavoriteProducts(memberId, input);
-	// // }
-	// // public async getVisited(memberId: ObjectId, input: OrdinaryInquiryDto): Promise<ProductsDto> {
-	// // 	return await this.viewService.geVisitedProducts(memberId, input);
-	// // }
+	public async getFavorites(memberId: ObjectId, input: OrdinaryInquiryDto): Promise<ProductsDto> {
+		return await this.likeService.geFavoriteProducts(memberId, input);
+	}
+	
+	public async getVisited(memberId: ObjectId, input: OrdinaryInquiryDto): Promise<ProductsDto> {
+		return await this.viewService.geVisitedProducts(memberId, input);
+	}
 
 	public async getAgentProducts(memberId: ObjectId, input: AgentProductsInquiryDto): Promise<ProductsDto> {
 		const { productStatus } = input.search;

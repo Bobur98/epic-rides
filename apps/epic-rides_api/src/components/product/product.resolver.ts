@@ -69,29 +69,29 @@ export class ProductResolver {
 	}
 
 	// get member's favorite products
-	// @UseGuards(AuthGuard)
-	// @Query((returns) => ProductsDto)
-	// public async getFavorites(
-	// 	@Args('input') input: OrdinaryInquiryDto,
-	// 	@AuthMember('_id') memberId: ObjectId,
-	// ): Promise<ProductsDto> {
-	// 	console.log(input);
+	@UseGuards(AuthGuard)
+	@Query((returns) => ProductsDto)
+	public async getFavorites(
+		@Args('input') input: OrdinaryInquiryDto,
+		@AuthMember('_id') memberId: ObjectId,
+	): Promise<ProductsDto> {
+		console.log(input);
 
-	// 	console.log('Query: getFavorites');
-	// 	return await this.productService.getFavorites(memberId, input);
-	// }
+		console.log('Query: getFavorites');
+		return await this.productService.getFavorites(memberId, input);
+	}
 
-	// @UseGuards(AuthGuard)
-	// @Query((returns) => ProductsDto)
-	// public async getVisited(
-	// 	@Args('input') input: OrdinaryInquiryDto,
-	// 	@AuthMember('_id') memberId: ObjectId,
-	// ): Promise<ProductsDto> {
-	// 	console.log(input);
+	@UseGuards(AuthGuard)
+	@Query((returns) => ProductsDto)
+	public async getVisited(
+		@Args('input') input: OrdinaryInquiryDto,
+		@AuthMember('_id') memberId: ObjectId,
+	): Promise<ProductsDto> {
+		console.log(input);
 
-	// 	console.log('Query: getVisited');
-	// 	return await this.productService.getVisited(memberId, input);
-	// }
+		console.log('Query: getVisited');
+		return await this.productService.getVisited(memberId, input);
+	}
 
 	@Roles(MemberType.AGENT)
 	@UseGuards(RolesGuard)

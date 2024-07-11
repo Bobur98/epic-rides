@@ -78,7 +78,6 @@ export class LikeService {
 			])
 			.exec();
 
-		console.log('My favorite data: ', data[0]);
 		const result: ProductsDto = { list: [], metaCounter: data[0].metaCounter };
 		result.list = data[0].list.map((ele: { favoriteProduct: string[] }) => ele.favoriteProduct);
 		console.log(result);
