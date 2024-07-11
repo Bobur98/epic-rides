@@ -74,7 +74,7 @@ export class FollowingDto {
 }
 
 @ObjectType()
-export class Followings {
+export class FollowingsDto {
 	@Field(() => [FollowingDto])
 	list: FollowingDto[];
 
