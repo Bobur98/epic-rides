@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { EpicRidesBatchModule } from './../src/epic-rides_batch.module';
+import { EpicRidesBatchModule } from '../src/batch.module';
 
 describe('EpicRidesBatchController (e2e)', () => {
   let app: INestApplication;
