@@ -8,6 +8,7 @@ export enum Message {
 	REMOVE_FAILED = 'Remove failed!',
 	UPLOAD_FAILED = 'Upload failed!',
 	BAD_REQUEST = 'Bad Request',
+	DUPLICATE_FAQ = 'FAQ with the same question already exists',
 
 	USED_MEMBER_NICK_OR_PHONE = 'Already used membernick or phone',
 	NO_MEMBER_NICK = 'No member with that member nick!',

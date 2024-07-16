@@ -38,7 +38,7 @@ export class FaqInquiryDto {
 	limit: number;
 
 	@IsOptional()
-	@IsIn([FaqType]) // need to be checked
+	@IsIn(Object.values(FaqType))
 	@Field(() => FaqType, { nullable: true })
-	types?: FaqType;
+	faqType?: FaqType;
 }
