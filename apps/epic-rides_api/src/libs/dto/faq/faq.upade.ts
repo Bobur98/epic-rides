@@ -5,7 +5,7 @@ import { BoardArticleCategory } from '../../enums/board-article.enum';
 import { FaqType } from '../../enums/faq.enum';
 
 @InputType()
-export class FaqInputDto {
+export class FaqUpdateDto {
 	@IsNotEmpty()
 	@Field(() => String)
 	_id: ObjectId;
