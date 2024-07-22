@@ -99,8 +99,12 @@ export class ProductService {
 		const match: T = { productStatus: ProductStatus.ACTIVE };
 		const sort: T = { [input?.sort ?? 'createdAt']: input?.direction ?? Direction.DESC };
 
+		console.log(input.search, 'INPUT');
+
 		this.shapeMatchQuery(match, input);
 
+		console.log(match, 'MATCH');
+		
 		const result = await this.productModel
 			.aggregate([
 				{ $match: match },
@@ -131,28 +135,31 @@ export class ProductService {
 			locationList,
 			typeList,
 			modelList,
-			engineList,
-			powerList,
-			torqueList,
+			engine,
+			engineRangeCc,
+			powerRange,
+			torqueRange,
 			conditionList,
 			pricesRange,
 			yearsRange,
 			weightRange,
 			options,
 			text,
+			brandList,
 		} = input.search;
 
 		if (memberId) match.memberId = shapeIntoMongoObjectId(memberId);
 		if (locationList && locationList.length) match.productLocation = { $in: locationList };
-		if (modelList && locationList.length) match.productModel = { $in: modelList };
-		if (engineList && locationList.length) match.productEngine = { $in: engineList };
-		if (typeList && locationList.length) match.productType = { $in: typeList };
-		if (powerList && locationList.length) match.productPower = { $in: powerList };
-		if (torqueList && locationList.length) match.productTorque = { $in: torqueList };
-		if (conditionList && locationList.length) match.productCondition = { $in: conditionList };
+		if (brandList && brandList.length) match.productBrand = { $in: brandList };
+		if (modelList && modelList.length) match.productModel = { $in: modelList };
+		if (typeList && typeList.length) match.productType = { $in: typeList };
+		if (conditionList && conditionList.length) match.productCondition = { $in: conditionList };
 
+		if (engineRangeCc) match.productEngineCc = { $gte: engineRangeCc.start, $lte: engineRangeCc.end };
+		if (powerRange) match.productPower = { $gte: powerRange.start, $lte: powerRange.end };
+		if (torqueRange) match.productTorque = { $gte: torqueRange.start, $lte: torqueRange.end };
 		if (pricesRange) match.productPrice = { $gte: pricesRange.start, $lte: pricesRange.end };
-		if (yearsRange) match.createdAt = { $gte: yearsRange.start, $lte: yearsRange.end };
+		if (yearsRange) match.productYear = { $gte: yearsRange.start, $lte: yearsRange.end };
 		if (weightRange) match.productWeight = { $gte: weightRange.start, $lte: weightRange.end };
 
 		if (text) match.productBrand = { $regex: new RegExp(text, 'i') };

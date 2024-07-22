@@ -17,6 +17,26 @@ registerEnumType(ProductType, {
 	name: 'ProductType',
 });
 
+export enum ProductBrand {
+	HONDA = 'HONDA',
+	YAMAHA = 'YAMAHA',
+	KAWASAKI = 'KAWASAKI',
+	SUZUKI = 'SUZUKI',
+	DUCATI = 'DUCATI',
+	BMW = 'BMW',
+	HARLEY_DAVIDSON = 'HARLEY-DAVIDSON',
+	KTM = 'KTM',
+	TRIUMPH = 'TRIUMPH',
+	INDIAN = 'INDIAN',
+}
+registerEnumType(ProductBrand, {
+	name: 'ProductBrand',
+});
+
+registerEnumType(ProductType, {
+	name: 'ProductType',
+});
+
 export enum ProductStatus {
 	HOLD = 'HOLD',
 	ACTIVE = 'ACTIVE',

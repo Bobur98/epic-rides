@@ -56,7 +56,7 @@ export class BoardArticleResolver {
 		return await this.boardArticleService.updateBoardArticle(memberId, input);
 	}
 
-	@UseGuards(AuthGuard)
+	@UseGuards(WithoutGuard)
 	@Query((returns) => BoardArticlesDto)
 	public async getBoardArticles(
 		@Args('input') input: BoardArticlesInquiryDto,
@@ -66,7 +66,7 @@ export class BoardArticleResolver {
 		return await this.boardArticleService.getBoardArticles(memberId, input);
 	}
 
-	@UseGuards(AuthGuard)
+	@UseGuards(WithoutGuard)
 	@Mutation(() => BoardArticleDto)
 	public async likeTargetBoardArticle(
 		@Args('boardArticleId') input: string,

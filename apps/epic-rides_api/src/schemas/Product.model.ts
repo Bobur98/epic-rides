@@ -1,10 +1,17 @@
 import { Schema } from 'mongoose';
-import { ProductCondition, ProductLocation, ProductStatus, ProductType } from '../libs/enums/product.enum';
+import {
+	ProductBrand,
+	ProductCondition,
+	ProductLocation,
+	ProductStatus,
+	ProductType,
+} from '../libs/enums/product.enum';
 
 const ProductSchema = new Schema(
 	{
 		productBrand: {
 			type: String,
+			enum: ProductBrand,
 			required: true,
 		},
 
@@ -26,6 +33,11 @@ const ProductSchema = new Schema(
 
 		productEngine: {
 			type: String,
+			required: true,
+		},
+
+		productEngineCc: {
+			type: Number,
 			required: true,
 		},
 

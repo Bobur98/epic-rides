@@ -1,7 +1,7 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { ObjectId } from 'mongoose';
 import { MemberDto, TotalCounter } from '../member/member';
-import { ProductCondition, ProductLocation, ProductStatus, ProductType } from '../../enums/product.enum';
+import { ProductBrand, ProductCondition, ProductLocation, ProductStatus, ProductType } from '../../enums/product.enum';
 import { MeLikedDto } from '../like/like';
 
 @ObjectType()
@@ -9,8 +9,8 @@ export class ProductDto {
 	@Field(() => String)
 	_id: ObjectId;
 
-	@Field(() => String)
-	productBrand: string;
+	@Field(() => ProductBrand)
+	productBrand: ProductBrand;
 
 	@Field(() => String)
 	productModel: string;
@@ -23,6 +23,9 @@ export class ProductDto {
 
 	@Field(() => String)
 	productEngine: string;
+
+	@Field(() => Number)
+	productEngineCc: number;
 
 	@Field(() => Number)
 	productPower: number;

@@ -3,15 +3,15 @@ import { IsIn, IsInt, IsNotEmpty, IsOptional, Length, Min } from 'class-validato
 import { MemberAuthType, MemberStatus, MemberType } from '../../enums/member.enum';
 import { Direction } from '../../enums/common.enum';
 import { ObjectId } from 'mongoose';
-import { ProductCondition, ProductLocation, ProductStatus, ProductType } from '../../enums/product.enum';
+import { ProductBrand, ProductCondition, ProductLocation, ProductStatus, ProductType } from '../../enums/product.enum';
 import { availableOptions, availableProductSorts } from '../../config';
 
 @InputType()
 export class ProductInputDto {
 	@IsNotEmpty()
 	@Length(3, 100)
-	@Field(() => String)
-	productBrand: string;
+	@Field(() => ProductBrand)
+	productBrand: ProductBrand;
 
 	@IsNotEmpty()
 	@Length(3, 100)
@@ -30,6 +30,10 @@ export class ProductInputDto {
 	@IsNotEmpty()
 	@Field(() => String)
 	productEngine: string;
+
+	@IsNotEmpty()
+	@Field(() => Number)
+	productEngineCc: number;
 
 	@IsNotEmpty()
 	@Field(() => Number)
@@ -103,6 +107,31 @@ export class YearsRange {
 }
 
 @InputType()
+export class EngineRange {
+	@Field(() => Int)
+	start: number;
+
+	@Field(() => Int)
+	end: number;
+}
+@InputType()
+export class PowerRange {
+	@Field(() => Int)
+	start: number;
+
+	@Field(() => Int)
+	end: number;
+}
+@InputType()
+export class TorqueRange {
+	@Field(() => Int)
+	start: number;
+
+	@Field(() => Int)
+	end: number;
+}
+
+@InputType()
 class PISearch {
 	@IsOptional()
 	@Field(() => String, { nullable: true })
@@ -122,15 +151,23 @@ class PISearch {
 
 	@IsOptional()
 	@Field(() => [String], { nullable: true })
-	engineList?: string[];
+	brandList?: string[];
 
 	@IsOptional()
-	@Field(() => [Int], { nullable: true })
-	powerList?: number[];
+	@Field(() => String, { nullable: true })
+	engine?: string;
 
 	@IsOptional()
-	@Field(() => [Int], { nullable: true })
-	torqueList?: number[];
+	@Field(() => EngineRange, { nullable: true })
+	engineRangeCc?: EngineRange;
+
+	@IsOptional()
+	@Field(() => PowerRange, { nullable: true })
+	powerRange?: PowerRange;
+
+	@IsOptional()
+	@Field(() => TorqueRange, { nullable: true })
+	torqueRange?: TorqueRange;
 
 	@IsOptional()
 	@IsIn(availableOptions, { each: true })
@@ -251,7 +288,7 @@ export class AllProductsInquiryDto {
 
 	@IsNotEmpty()
 	@Field(() => ALLPISearch)
-	search: ALLPISearch;
+	search?: ALLPISearch;
 }
 
 @InputType()

@@ -130,6 +130,7 @@ export class MemberService {
 
 		if (text) match.memberNick = { $regex: new RegExp(text, 'i') };
 		console.log('match:', match);
+		console.log('2');
 
 		const result = await this.memberModel
 			.aggregate([
@@ -143,8 +144,11 @@ export class MemberService {
 				},
 			])
 			.exec();
+		console.log('3');
 
 		if (!result.length) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
+		console.log('4');
+
 		return result[0];
 	}
 

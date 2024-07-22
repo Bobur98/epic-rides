@@ -62,7 +62,7 @@ export class ProductResolver {
 		@Args('input') input: ProductsInquiryDto,
 		@AuthMember('_id') memberId: ObjectId,
 	): Promise<ProductsDto> {
-		console.log(input);
+		console.log(input.search, 'INPUT1');
 
 		console.log('Query: getProducts');
 		return await this.productService.getProducts(memberId, input);

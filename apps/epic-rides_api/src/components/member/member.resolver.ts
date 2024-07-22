@@ -93,6 +93,8 @@ export class MemberResolver {
 		@AuthMember('_id') memberId: ObjectId,
 	): Promise<MembersDto> {
 		console.log('Query, getAgents');
+		console.log('1');
+
 		return await this.memberService.getAgents(memberId, input);
 	}
 

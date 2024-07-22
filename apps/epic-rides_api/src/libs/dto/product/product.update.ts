@@ -1,7 +1,7 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
 import { IsInt, IsNotEmpty, IsOptional, Length, Min } from 'class-validator';
 import { ObjectId } from 'mongoose';
-import { ProductCondition, ProductLocation, ProductStatus, ProductType } from '../../enums/product.enum';
+import { ProductBrand, ProductCondition, ProductLocation, ProductStatus, ProductType } from '../../enums/product.enum';
 
 @InputType()
 export class ProductUpdateDto {
@@ -22,9 +22,9 @@ export class ProductUpdateDto {
 	productLocation?: ProductLocation;
 
 	@IsOptional()
-	@Length(3, 100)
-	@Field(() => String, { nullable: true })
-	productBrand?: string;
+	@Length(3, 25)
+	@Field(() => ProductBrand, { nullable: true })
+	productBrand?: ProductBrand;
 
 	@IsOptional()
 	@Field(() => Number, { nullable: true })
@@ -47,6 +47,12 @@ export class ProductUpdateDto {
 	productEngine?: string;
 
 	@IsOptional()
+	@IsInt()
+	@Min(1)
+	@Field(() => Number, { nullable: true })
+	productEngineCc?: number;
+
+	@IsOptional()
 	@Field(() => Number, { nullable: true })
 	productPower?: number;
 
@@ -67,7 +73,7 @@ export class ProductUpdateDto {
 	productImages?: string[];
 
 	@IsOptional()
-	@Length(5, 500)
+	@Length(5, 100)
 	@Field(() => String, { nullable: true })
 	productDesc?: string;
 
