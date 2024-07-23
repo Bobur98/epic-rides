@@ -99,11 +99,11 @@ export class WeightRange {
 
 @InputType()
 export class YearsRange {
-	@Field(() => Date)
-	start: Date;
+	@Field(() => Number)
+	start: number;
 
-	@Field(() => Date)
-	end: Date;
+	@Field(() => Number)
+	end: number;
 }
 
 @InputType()
