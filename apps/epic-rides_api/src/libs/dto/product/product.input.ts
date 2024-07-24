@@ -67,14 +67,19 @@ export class ProductInputDto {
 	@Field(() => [String])
 	productImages: string[];
 
-	@IsOptional()
-	@Length(5, 100)
-	@Field(() => String, { nullable: true })
-	productDesc?: string;
+	@IsNotEmpty()
+	@Length(5, 150)
+	@Field(() => String)
+	productDesc: string;
 
 	@IsNotEmpty()
 	@Field(() => ProductLocation)
 	productLocation: ProductLocation;
+
+	@IsNotEmpty()
+	@Length(5, 60)
+	@Field(() => String)
+	productAddress: string;
 
 	memberId?: ObjectId;
 }

@@ -22,6 +22,10 @@ export class ProductUpdateDto {
 	productLocation?: ProductLocation;
 
 	@IsOptional()
+	@Field(() => String, { nullable: true })
+	productAddress?: string;
+
+	@IsOptional()
 	@Length(3, 25)
 	@Field(() => ProductBrand, { nullable: true })
 	productBrand?: ProductBrand;
@@ -41,8 +45,6 @@ export class ProductUpdateDto {
 	productYear?: number;
 
 	@IsOptional()
-	@IsInt()
-	@Min(1)
 	@Field(() => String, { nullable: true })
 	productEngine?: string;
 
@@ -73,7 +75,7 @@ export class ProductUpdateDto {
 	productImages?: string[];
 
 	@IsOptional()
-	@Length(5, 100)
+	@Length(5, 150)
 	@Field(() => String, { nullable: true })
 	productDesc?: string;
 
