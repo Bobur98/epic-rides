@@ -2,7 +2,7 @@ import { InputType, Field } from '@nestjs/graphql';
 import { IsNotEmpty, Length, IsOptional } from 'class-validator';
 import { ObjectId } from 'mongoose';
 import { BoardArticleCategory } from '../../enums/board-article.enum';
-import { NoticeType } from '../../enums/notice.enum';
+import { NoticeStatus, NoticeType } from '../../enums/notice.enum';
 
 @InputType()
 export class NoticeUpdateDto {
@@ -18,4 +18,8 @@ export class NoticeUpdateDto {
 	@IsOptional()
 	@Field(() => NoticeType, { nullable: true })
 	noticeType: NoticeType;
+
+	@IsOptional()
+	@Field(() => NoticeStatus, { nullable: true })
+	noticeStatus: NoticeStatus;
 }

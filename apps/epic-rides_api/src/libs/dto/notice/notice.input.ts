@@ -19,8 +19,8 @@ export class NoticeInputDto {
 	@Field(() => String)
 	noticeContent: string;
 
-	@Field(() => NoticeStatus)
-	noticeStatus: NoticeStatus;
+	@Field(() => NoticeStatus, { nullable: true })
+	noticeStatus?: NoticeStatus;
 
 	memberId?: ObjectId;
 }
@@ -52,4 +52,8 @@ export class NoticeInquiryDto {
 	@IsIn(Object.values(NoticeType))
 	@Field(() => NoticeType, { nullable: true })
 	noticeType?: NoticeType;
+
+	@IsOptional()
+	@Field(() => NoticeStatus, { nullable: true })
+	noticeStatus?: NoticeStatus;
 }

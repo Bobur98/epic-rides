@@ -12,3 +12,13 @@ export enum FaqType {
 registerEnumType(FaqType, {
 	name: 'FaqType',
 });
+
+export enum FaqStatus {
+	HOLD = 'HOLD',
+	ACTIVE = 'ACTIVE',
+	DELETE = 'DELETE',
+}
+
+registerEnumType(FaqStatus, {
+	name: 'FaqStatus',
+});

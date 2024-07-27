@@ -2,14 +2,14 @@ import { Field, InputType, Int, ObjectType } from '@nestjs/graphql';
 import { ObjectId } from 'mongoose';
 import { CommentGroup, CommentStatus } from '../../enums/comment.enum';
 import { MemberDto, TotalCounter } from '../member/member';
-import { FaqType } from '../../enums/faq.enum';
+import { FaqStatus, FaqType } from '../../enums/faq.enum';
 import { IsNotEmpty, Min, IsOptional, IsIn, Length } from 'class-validator';
 import { availableCommentSorts } from '../../config';
 
 @InputType()
 export class FaqInputDto {
 	@IsNotEmpty()
-	@Length(10, 50)
+	@Length(8, 50)
 	@Field(() => String)
 	faqQuestion: string;
 
@@ -21,6 +21,10 @@ export class FaqInputDto {
 	@IsNotEmpty()
 	@Field(() => FaqType)
 	faqType: FaqType;
+
+	@IsOptional()
+	@Field(() => FaqStatus, { nullable: true })
+	faqStatus?: FaqStatus;
 
 	memberId?: ObjectId;
 }
@@ -38,7 +42,16 @@ export class FaqInquiryDto {
 	limit: number;
 
 	@IsOptional()
+	@Field(() => String, { nullable: true })
+	sort?: string;
+
+	@IsOptional()
 	@IsIn(Object.values(FaqType))
 	@Field(() => FaqType, { nullable: true })
 	faqType?: FaqType;
+
+	@IsOptional()
+	@IsIn(Object.values(FaqStatus))
+	@Field(() => FaqStatus, { nullable: true })
+	faqStatus?: FaqStatus;
 }

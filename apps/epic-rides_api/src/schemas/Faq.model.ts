@@ -1,5 +1,5 @@
 import { Schema } from 'mongoose';
-import { FaqType } from '../libs/enums/faq.enum';
+import { FaqStatus, FaqType } from '../libs/enums/faq.enum';
 
 const FaqSchema = new Schema(
 	{
@@ -19,6 +19,11 @@ const FaqSchema = new Schema(
 			type: String,
 			enum: FaqType,
 			default: FaqType.MOTORCYCLE,
+		},
+		faqStatus: {
+			type: String,
+			enum: FaqStatus,
+			default: FaqStatus.ACTIVE,
 		},
 	},
 	{ timestamps: true, collection: 'faqs' },

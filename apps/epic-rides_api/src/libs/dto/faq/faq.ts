@@ -2,7 +2,7 @@ import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { ObjectId } from 'mongoose';
 import { CommentGroup, CommentStatus } from '../../enums/comment.enum';
 import { MemberDto, TotalCounter } from '../member/member';
-import { FaqType } from '../../enums/faq.enum';
+import { FaqStatus, FaqType } from '../../enums/faq.enum';
 
 @ObjectType()
 export class FaqDto {
@@ -17,6 +17,9 @@ export class FaqDto {
 
 	@Field(() => FaqType)
 	faqType: FaqType;
+
+	@Field(() => FaqStatus, { nullable: true })
+	faqStatus?: FaqStatus;
 
 	@Field(() => MemberDto, { nullable: true })
 	memberData?: MemberDto;

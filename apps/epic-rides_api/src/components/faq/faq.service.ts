@@ -37,6 +37,8 @@ export class FaqService {
 		// if (existingFaq?.faqQuestion === insertedQuestion) {
 		// 	throw new InternalServerErrorException(Message.DUPLICATE_FAQ);
 		// }
+		console.log(input, 'FAQ INPUT');
+		
 		const result: FaqDto = await this.faqModel
 			.findOneAndUpdate({ _id: input._id, memberId: memberId }, input, {
 				new: true,
@@ -65,9 +67,11 @@ export class FaqService {
 	}
 
 	public async getFaqs(memberId: ObjectId, input: FaqInquiryDto): Promise<FaqsDto> {
-		const { faqType } = input;
+		const { faqType, faqStatus } = input;
+		let match: T = {};
+		match = faqType ? { faqType } : {};
+		match = faqStatus ? { faqStatus } : {};
 
-		const match: T = { faqType };
 		const sort: T = { ['createdAt']: -1 };
 		const result = await this.faqModel
 			.aggregate([
@@ -92,6 +96,7 @@ export class FaqService {
 				faqQuestion: item.faqQuestion,
 				faqAnswer: item.faqAnswer,
 				faqType: item.faqType,
+				faqStatus: item.faqStatus,
 				memberData: item.memberData,
 				createdAt: item.createdAt,
 				updatedAt: item.updatedAt,
