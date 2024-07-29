@@ -13,13 +13,13 @@ export class NoticeUpdateDto {
 	@IsOptional()
 	@Length(10, 150)
 	@Field(() => String, { nullable: true })
-	noticeContent: string;
+	noticeContent?: string;
 
 	@IsOptional()
 	@Field(() => NoticeType, { nullable: true })
-	noticeType: NoticeType;
+	noticeType?: NoticeType;
 
 	@IsOptional()
 	@Field(() => NoticeStatus, { nullable: true })
-	noticeStatus: NoticeStatus;
+	noticeStatus?: NoticeStatus;
 }

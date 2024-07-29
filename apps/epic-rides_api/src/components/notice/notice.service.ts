@@ -17,6 +17,8 @@ export class NoticeService {
 	) {}
 
 	public async createNotice(input: NoticeInputDto): Promise<NoticeDto> {
+		console.log(input, 'CREATE INPUT');
+		
 		try {
 			const result: any = await this.noticeModel.create(input);
 
@@ -31,6 +33,10 @@ export class NoticeService {
 	}
 
 	public async updateNotice(memberId: ObjectId, input: NoticeUpdateDto): Promise<NoticeDto> {
+		
+		console.log(input, 'NOTICE INPUT');
+		
+
 		const result: NoticeDto = await this.noticeModel
 			.findOneAndUpdate({ _id: input._id, memberId: memberId }, input, {
 				new: true,
@@ -59,9 +65,24 @@ export class NoticeService {
 	}
 
 	public async getNotices(memberId: ObjectId, input: NoticeInquiryDto): Promise<NoticesDto> {
-		const { noticeType } = input;
+		const { noticeType, text, noticeStatus } = input;
 
-		const match: T = { noticeStatus: NoticeStatus.ACTIVE };
+		console.log(input, 'GET NOTICES');
+
+		const match: T = {};
+		if (noticeType) {
+			match.noticeType = noticeType;
+		}
+
+		if (noticeStatus) {
+			match.noticeStatus = noticeStatus;
+		}
+
+		if (text) {
+			match.noticeContent = { $regex: new RegExp(text, 'i') };
+		}
+		console.log(match, 'MATCH');
+		
 		const sort: T = { ['createdAt']: -1 };
 		const result = await this.noticeModel
 			.aggregate([

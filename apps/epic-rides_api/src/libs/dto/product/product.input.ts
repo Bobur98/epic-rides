@@ -52,7 +52,7 @@ export class ProductInputDto {
 	productPrice: number;
 
 	@IsNotEmpty()
-	@Field(() => ProductCondition) //bu PropertyType <property.enum>da registerEnumType qilib ko'rsatilgani uchun ishlamoqda(graphQL shuning uchun tanimoqda)
+	@Field(() => ProductCondition) //bu productType <product.enum>da registerEnumType qilib ko'rsatilgani uchun ishlamoqda(graphQL shuning uchun tanimoqda)
 	productCondition: ProductCondition;
 
 	@IsOptional()
@@ -104,10 +104,10 @@ export class WeightRange {
 
 @InputType()
 export class YearsRange {
-	@Field(() => Number)
+	@Field(() => Int)
 	start: number;
 
-	@Field(() => Number)
+	@Field(() => Int)
 	end: number;
 }
 

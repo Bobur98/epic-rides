@@ -54,4 +54,8 @@ export class FaqInquiryDto {
 	@IsIn(Object.values(FaqStatus))
 	@Field(() => FaqStatus, { nullable: true })
 	faqStatus?: FaqStatus;
+
+	@IsOptional()
+	@Field(() => String, { nullable: true })
+	text?: string;
 }

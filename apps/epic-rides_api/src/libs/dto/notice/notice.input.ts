@@ -25,8 +25,6 @@ export class NoticeInputDto {
 	memberId?: ObjectId;
 }
 
-class NISearch {}
-
 @InputType()
 export class NoticeInquiryDto {
 	@IsNotEmpty()
@@ -44,9 +42,9 @@ export class NoticeInquiryDto {
 	@Field(() => String, { nullable: true })
 	sort?: string;
 
-	@IsOptional()
-	@Field(() => Direction, { nullable: true })
-	direction?: Direction;
+	// @IsOptional()
+	// @Field(() => Direction, { nullable: true })
+	// direction?: Direction;
 
 	@IsOptional()
 	@IsIn(Object.values(NoticeType))
@@ -56,4 +54,8 @@ export class NoticeInquiryDto {
 	@IsOptional()
 	@Field(() => NoticeStatus, { nullable: true })
 	noticeStatus?: NoticeStatus;
+
+	@IsOptional()
+	@Field(() => String, { nullable: true })
+	text?: string;
 }

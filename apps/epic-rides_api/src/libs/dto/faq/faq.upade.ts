@@ -13,18 +13,18 @@ export class FaqUpdateDto {
 	@IsOptional()
 	@Length(10, 50)
 	@Field(() => String, { nullable: true })
-	faqQuestion: string;
+	faqQuestion?: string;
 
 	@IsOptional()
 	@Length(10, 150)
 	@Field(() => String, { nullable: true })
-	faqAnswer: string;
+	faqAnswer?: string;
 
 	@IsOptional()
 	@Field(() => FaqType, { nullable: true })
-	faqType: FaqType;
+	faqType?: FaqType;
 
 	@IsOptional()
 	@Field(() => FaqStatus, { nullable: true })
-	faqStatus: FaqStatus;
+	faqStatus?: FaqStatus;
 }

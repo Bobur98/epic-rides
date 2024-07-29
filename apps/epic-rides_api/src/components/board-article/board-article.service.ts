@@ -18,14 +18,22 @@ import { lookupAuthMemberLiked, lookupMember, shapeIntoMongoObjectId } from '../
 import { LikeInputDto } from '../../libs/dto/like/like.input';
 import { LikeGroup } from '../../libs/enums/like.enum';
 import { LikeService } from '../like/like.service';
+import { MemberDto } from '../../libs/dto/member/member';
+import { NotificationInput } from '../../libs/dto/notification/notification.input';
+import { MemberStatus } from '../../libs/enums/member.enum';
+import { NotificationGroup, NotificationStatus, NotificationType } from '../../libs/enums/notification.enum';
+import { NotificationService } from '../notification/notification.service';
 
 @Injectable()
 export class BoardArticleService {
 	constructor(
 		@InjectModel('BoardArticle') private readonly boardArticleModel: Model<BoardArticleDto>,
+		@InjectModel('Member') private readonly memberModel: Model<MemberDto>,
+
 		private readonly memberService: MemberService,
 		private readonly viewService: ViewService,
 		private readonly likeService: LikeService,
+		private readonly notificationService: NotificationService,
 	) {}
 
 	public async createBoardArticle(memberId: ObjectId, input: BoardArticleInputDto) {
@@ -138,6 +146,24 @@ export class BoardArticleService {
 			likeRefId: likeRefId,
 			likeGroup: LikeGroup.ARTICLE,
 		};
+
+		// NOTIFICATION
+		const authMember: MemberDto = await this.memberModel
+			.findOne({ _id: memberId, memberStatus: MemberStatus.ACTIVE })
+			.exec();
+		if (!authMember) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
+
+		const notificInput: NotificationInput = {
+			notificationGroup: NotificationGroup.ARTICLE,
+			notificationType: NotificationType.LIKE,
+			notificationStatus: NotificationStatus.WAIT,
+			notificationTitle: `Liked`,
+			notificationDesc: `${authMember.memberNick} liked your article ${target.articleTitle} `,
+			authorId: memberId,
+			receiverId: target.memberId,
+			productId: likeRefId,
+		};
+		await this.notificationService.createNotification(notificInput);
 
 		// LIKE TOGGLE
 		const modifier: number = await this.likeService.toggleLike(input);

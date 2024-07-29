@@ -67,10 +67,23 @@ export class FaqService {
 	}
 
 	public async getFaqs(memberId: ObjectId, input: FaqInquiryDto): Promise<FaqsDto> {
-		const { faqType, faqStatus } = input;
-		let match: T = {};
-		match = faqType ? { faqType } : {};
-		match = faqStatus ? { faqStatus } : {};
+		console.log(input, 'INPUT');
+
+		const { faqType, faqStatus, text } = input;
+		const match: T = {};
+
+		if (faqType) {
+			match.faqType = faqType;
+		}
+		if (faqStatus) {
+			match.faqStatus = faqStatus;
+		}
+		if (text) {
+			// match.faqAnswer = { $regex: new RegExp(text, 'i') };
+			match.faqQuestion = { $regex: new RegExp(text, 'i') };
+		}
+
+		console.log(match, 'MATCH');
 
 		const sort: T = { ['createdAt']: -1 };
 		const result = await this.faqModel

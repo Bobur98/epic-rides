@@ -22,15 +22,23 @@ import { StatisticModifier, T } from '../../libs/types/common';
 import { ProductUpdateDto } from '../../libs/dto/product/product.update';
 import { LikeInputDto } from '../../libs/dto/like/like.input';
 import { LikeService } from '../like/like.service';
+import { MemberDto } from '../../libs/dto/member/member';
+import { MemberStatus } from '../../libs/enums/member.enum';
+import { NotificationInput } from '../../libs/dto/notification/notification.input';
+import { NotificationGroup, NotificationStatus, NotificationType } from '../../libs/enums/notification.enum';
+import { NotificationService } from '../notification/notification.service';
 
 @Injectable()
 export class ProductService {
 	constructor(
 		@InjectModel('Product') private readonly productModel: Model<ProductDto>,
+		@InjectModel('Member') private readonly memberModel: Model<MemberDto>,
+
 		private authService: AuthService,
 		private viewService: ViewService,
 		private memberService: MemberService,
 		private likeService: LikeService,
+		private notificationService: NotificationService,
 	) {}
 
 	public async createProduct(input: ProductInputDto): Promise<ProductDto> {
@@ -104,7 +112,7 @@ export class ProductService {
 		this.shapeMatchQuery(match, input);
 
 		console.log(match, 'MATCH');
-		
+
 		const result = await this.productModel
 			.aggregate([
 				{ $match: match },
@@ -174,7 +182,7 @@ export class ProductService {
 	public async getFavorites(memberId: ObjectId, input: OrdinaryInquiryDto): Promise<ProductsDto> {
 		return await this.likeService.geFavoriteProducts(memberId, input);
 	}
-	
+
 	public async getVisited(memberId: ObjectId, input: OrdinaryInquiryDto): Promise<ProductsDto> {
 		return await this.viewService.geVisitedProducts(memberId, input);
 	}
@@ -225,6 +233,25 @@ export class ProductService {
 		// LIKE TOGGLE
 		const modifier: number = await this.likeService.toggleLike(input);
 		const result = await this.productStatsEditor({ _id: likeRefId, targetKey: 'productLikes', modifier: modifier });
+
+		//notification
+		const authMember: MemberDto = await this.memberModel
+			.findOne({
+				_id: memberId,
+				memberStatus: MemberStatus.ACTIVE,
+			})
+			.exec();
+		if (!authMember) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
+		const notificInput: NotificationInput = {
+			notificationType: NotificationType.LIKE,
+			notificationStatus: NotificationStatus.WAIT,
+			notificationGroup: NotificationGroup.PRODUCT,
+			notificationTitle: 'Like',
+			notificationDesc: `${authMember.memberNick} like your property`,
+			authorId: memberId,
+			receiverId: target.memberId,
+		};
+		await this.notificationService.createNotification(notificInput);
 
 		if (!result) throw new InternalServerErrorException(Message.SOMETHING_WENT_WRONG);
 		return result;

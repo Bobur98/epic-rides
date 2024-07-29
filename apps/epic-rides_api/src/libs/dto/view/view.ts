@@ -12,7 +12,7 @@ export class ViewDto {
 	viewGroup: ViewGroup;
 
 	@Field(() => String)
-	viewRefId: ObjectId; // kimni yoki nmani tomosha qilyabti? Member, Article yoki Property
+	viewRefId: ObjectId; // kimni yoki nmani tomosha qilyabti? Member, Article yoki product
 
 	@Field(() => String)
 	memberId: ObjectId; // kim tomosha qilyabti

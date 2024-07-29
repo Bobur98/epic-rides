@@ -71,7 +71,8 @@ export class NoticeResolver {
 		@AuthMember('_id') memberId: ObjectId,
 	): Promise<NoticesDto> {
 		console.log('Query: getNotices');
-
+   console.log(input, 'GET NOTICES');
+	 
 		const data = this.noticeService.getNotices(memberId, input);
 
 		return data;

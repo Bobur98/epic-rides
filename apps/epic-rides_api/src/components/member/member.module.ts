@@ -7,6 +7,7 @@ import { AuthModule } from '../auth/auth.module';
 import { ViewModule } from '../view/view.module';
 import { LikeModule } from '../like/like.module';
 import FollowSchema from '../../schemas/Follow.model';
+import { NotificationModule } from '../notification/notification.module';
 
 @Module({
 	imports: [
@@ -16,6 +17,7 @@ import FollowSchema from '../../schemas/Follow.model';
 		ViewModule,
 		MemberModule,
 		LikeModule,
+		NotificationModule,
 	], // to use Schema model in service model, we need to import it module file
 	providers: [MemberResolver, MemberService],
 	exports: [MemberService], // Ensure it is exported here
