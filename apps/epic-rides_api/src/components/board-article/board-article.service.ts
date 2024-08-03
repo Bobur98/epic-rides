@@ -161,7 +161,7 @@ export class BoardArticleService {
 			notificationDesc: `${authMember.memberNick} liked your article ${target.articleTitle} `,
 			authorId: memberId,
 			receiverId: target.memberId,
-			productId: likeRefId,
+			articleId: likeRefId,
 		};
 		await this.notificationService.createNotification(notificInput);
 

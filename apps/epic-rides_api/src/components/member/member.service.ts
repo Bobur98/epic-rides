@@ -19,6 +19,9 @@ import { LikeInputDto } from '../../libs/dto/like/like.input';
 import { LikeGroup } from '../../libs/enums/like.enum';
 import { LikeService } from '../like/like.service';
 import { FollowerDto, FollowingDto, MeFollowedDto } from '../../libs/dto/follow/follow';
+import { NotificationInput } from '../../libs/dto/notification/notification.input';
+import { NotificationGroup, NotificationStatus, NotificationType } from '../../libs/enums/notification.enum';
+import { NotificationService } from '../notification/notification.service';
 
 @Injectable()
 export class MemberService {
@@ -28,6 +31,7 @@ export class MemberService {
 		private authService: AuthService,
 		private viewService: ViewService,
 		private likeService: LikeService,
+		private notificationService: NotificationService
 	) {}
 
 	public async signup(input: MemberInputDto): Promise<MemberDto> {
@@ -166,6 +170,24 @@ export class MemberService {
 		// LIKE TOGGLE
 		const modifier: number = await this.likeService.toggleLike(input);
 		const result = await this.memberStatsEditor({ _id: likeRefId, targetKey: 'memberLikes', modifier: modifier });
+
+		// NOTIFICATION
+		// const authMember: MemberDto = await this.memberModel
+		// 	.findOne({ _id: memberId, memberStatus: MemberStatus.ACTIVE })
+		// 	.exec();
+		// if (!authMember) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
+
+		// const notificInput: NotificationInput = {
+		// 	notificationGroup: NotificationGroup.MEMBER,
+		// 	notificationType: NotificationType.LIKE,
+		// 	notificationStatus: NotificationStatus.WAIT,
+		// 	notificationTitle: `Liked`,
+		// 	notificationDesc: `${authMember.memberNick} liked  ${target._id} `,
+		// 	authorId: memberId,
+		// 	receiverId: target.memberId,
+		// 	articleId: likeRefId,
+		// };
+		// await this.notificationService.createNotification(notificInput);
 
 		if (!result) throw new InternalServerErrorException(Message.SOMETHING_WENT_WRONG);
 		return result;
