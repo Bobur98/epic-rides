@@ -172,22 +172,22 @@ export class MemberService {
 		const result = await this.memberStatsEditor({ _id: likeRefId, targetKey: 'memberLikes', modifier: modifier });
 
 		// NOTIFICATION
-		// const authMember: MemberDto = await this.memberModel
-		// 	.findOne({ _id: memberId, memberStatus: MemberStatus.ACTIVE })
-		// 	.exec();
-		// if (!authMember) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
+		const AuthMember: MemberDto = await this.memberModel
+			.findOne({ _id: memberId, memberStatus: MemberStatus.ACTIVE })
+			.exec();
+		if (!AuthMember) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
 
-		// const notificInput: NotificationInput = {
-		// 	notificationGroup: NotificationGroup.MEMBER,
-		// 	notificationType: NotificationType.LIKE,
-		// 	notificationStatus: NotificationStatus.WAIT,
-		// 	notificationTitle: `Liked`,
-		// 	notificationDesc: `${authMember.memberNick} liked  ${target._id} `,
-		// 	authorId: memberId,
-		// 	receiverId: target.memberId,
-		// 	articleId: likeRefId,
-		// };
-		// await this.notificationService.createNotification(notificInput);
+		const notificInput = {
+			notificationType: NotificationType.LIKE,
+			notificationStatus: NotificationStatus.WAIT,
+			notificationGroup: NotificationGroup.MEMBER,
+			notificationTitle: 'Like',
+			notificationDesc: `${AuthMember.memberNick} Liked your photo`,
+			authorId: memberId,
+			receiverId: target._id,
+		};
+
+		await this.notificationService.createNotification(notificInput);
 
 		if (!result) throw new InternalServerErrorException(Message.SOMETHING_WENT_WRONG);
 		return result;
