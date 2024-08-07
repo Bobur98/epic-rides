@@ -6,7 +6,7 @@
 	"private": true,
 	"license": "ITC",
 	"scripts": {
-		"build": "nest build epic-rides_api && nest build epic-rides_batch",
+		"build": "nest build && nest build epic-rides_batch",
 		"format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
 		"start": "nest start",
 		"start:dev": "nest start --watch",
