@@ -6,7 +6,9 @@ services:
     restart: always
     image: node:20.10.0
     ports:
-      - "4001:3007"
+      - 4001:3007
+    environment:
+      - PORT=4001
     volumes:
       - ./:/usr/src/epic-rides
     working_dir: /usr/src/epic-rides
@@ -22,7 +24,9 @@ services:
     restart: unless-stopped
     image: node:20.10.0
     ports:
-      - "4002:3008"
+      - 4002:3008
+    environment:
+      - PORT=4002
     volumes:
       - ./:/usr/src/epic-rides
     working_dir: /usr/src/epic-rides
