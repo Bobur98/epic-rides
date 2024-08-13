@@ -57,11 +57,11 @@ export class ProductInputDto {
 
 	@IsOptional()
 	@Field(() => Boolean, { nullable: true })
-	productRent: boolean;
+	productRent?: boolean;
 
 	@IsOptional()
 	@Field(() => Boolean, { nullable: true })
-	productBarter: boolean;
+	productBarter?: boolean;
 
 	@IsNotEmpty()
 	@Field(() => [String])
